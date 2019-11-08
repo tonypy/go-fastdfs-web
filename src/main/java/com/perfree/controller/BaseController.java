@@ -58,11 +58,10 @@ public class BaseController {
     public String getPeersUrl(){
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         Peers peers = (Peers) request.getSession().getAttribute("peers");
-        String peersUrl = peers.getServerAddress();
-        if(StrUtil.isNotBlank(peers.getGroupName())){
-            peersUrl += "/" + peers.getGroupName();
+        if(!StringUtil.isBlank(peers.getGroupName())){
+            return  peers.getServerAddress()+"/"+peers.getGroupName();
         }
-        return peersUrl;
+        return  peers.getServerAddress();
     }
 
     /**
@@ -76,15 +75,15 @@ public class BaseController {
         String showAddress = "";
         if(StringUtil.isBlank(peers.getShowAddress())){
             if(StringUtil.isBlank(peers.getGroupName())){
-                showAddress += peers.getServerAddress()+"/group1";
+                showAddress = peers.getServerAddress();
             }else{
-                showAddress += peers.getShowAddress()+"/"+peers.getGroupName();
+                showAddress = peers.getServerAddress()+"/"+peers.getGroupName();
             }
         }else{
-            if(StringUtil.isBlank(peers.getGroupName())) {
-                showAddress += peers.getShowAddress()+"/group1";
+            if(StringUtil.isBlank(peers.getGroupName())){
+                showAddress = peers.getShowAddress();
             }else{
-                showAddress += peers.getShowAddress()+"/"+peers.getGroupName();
+                showAddress = peers.getShowAddress()+"/"+peers.getGroupName();
             }
         }
         return showAddress;
@@ -100,9 +99,9 @@ public class BaseController {
         Peers peers = (Peers) request.getSession().getAttribute("peers");
         String showAddress = "";
         if(StringUtil.isBlank(peers.getShowAddress())){
-                showAddress += peers.getServerAddress();
+            showAddress += peers.getServerAddress();
         }else{
-                showAddress += peers.getShowAddress();
+            showAddress += peers.getShowAddress();
         }
         return showAddress;
     }
